@@ -54,7 +54,7 @@ namespace CapaNegocio
 
                 var smtp = new SmtpClient()
                 {
-                    Credentials = new NetworkCredential("jordan.potenciano@gmail.com", "treh kgeb fgvx wxmj"),
+                    Credentials = new NetworkCredential("jordan.potenciano@gmail.com", "tctp ouyn tuaf gmbv"),
                     Host = "smtp.gmail.com",
                     Port = 587,
                     EnableSsl = true
@@ -69,5 +69,29 @@ namespace CapaNegocio
             }
             return resultado;
         }
+
+
+        public static string ConvertirBase64(string ruta, out bool conversion)
+        {
+            string textoBase64 = string.Empty;
+            conversion = true;
+
+            try
+            {
+                byte[] bytes = File.ReadAllBytes(ruta);
+                textoBase64 = Convert.ToBase64String(bytes);    
+            }
+            catch 
+            {
+
+                conversion = false;
+            }
+            return textoBase64;
+        }
+
+
+
+
+
     }
 }

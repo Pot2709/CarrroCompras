@@ -82,6 +82,7 @@ namespace CapaNegocio
                 Mensaje = "El correo del usuario no puede ser vacio";
             }
 
+
             if (string.IsNullOrEmpty(Mensaje))
             {
                 return objCapaDato.Editar(obj, out Mensaje);

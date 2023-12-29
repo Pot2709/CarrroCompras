@@ -101,7 +101,7 @@
     <script>
 
         var tabladata;
-        var filaSeleccionada
+        var filaSeleccionada;
 
         tabladata = $("#tabla").DataTable({
             responsive: true,
@@ -129,7 +129,7 @@
                                        '<button type="button" class="btn btn-danger btn-sm ms-2"><i class="fas fa-trash btn-eliminar"></i></button>',
                     "orderable": false,
                     "searchable": false,
-                    "with":"90px"
+                    "width":"90px"
 
                 }
             ],
@@ -144,6 +144,8 @@
             $("#txtnombres").val("");
             $("#txtapellidos").val("");
             $("#txtcorreo").val("");
+            $("#cboactivo").val(1);
+
 
             $("#mensajeError").hide();
 
@@ -260,6 +262,7 @@
                     else {
 
                         if (data.resultado) {
+
                             tabladata.row(filaSeleccionada).data(Usuario).draw(false);
                             filaSeleccionada = null;
                             $("#FormModal").modal("hide");
@@ -275,7 +278,7 @@
 
                     $(".modal-body").LoadingOverlay("hide");
 
-                    $("#mensajeError").text("Error A    jax");
+                    $("#mensajeError").text("Error Ajax");
                     $("#mensajeError").show();
                 },
                 beforeSend: function () {
