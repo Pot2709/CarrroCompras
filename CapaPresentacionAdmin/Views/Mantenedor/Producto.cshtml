@@ -55,7 +55,7 @@
             </div>
             <div class="modal-body">
 
-                <input id="txtid" type="text" value="0" />
+                <input id="txtid" type="hidden" value="0" />
 
                 <form id="contenedor" class="row">
 
@@ -118,11 +118,12 @@
                     </div>
                 </form>
 
-                @*MENSAJE DE ALERTA*@
-
+            
+                
                 <div class="row mt2">
                     <div class="col-12">
                         <div id="mensajeError" class="alert alert-danger" role="alert">
+
                         </div>
                     </div>
                 </div>
@@ -254,11 +255,11 @@
         });
 
 
-        //AQUI SE VALIDA EL PRECIO DECIMAL 
+        //AQUI SE VALIDA EL PRECIO DECIMAL
 
         jQuery.validator.addMethod("preciodecimal", function (value, element) {
             return this.optional(element) || /^\d{0,4}(\.\d{0,2})?$/i.test(value);
-            
+
         }, "El formato correcto del precio es ##.##");
 
 
@@ -270,7 +271,7 @@
 
                 descripcion: {
                     required: true,
-                    
+
                 },
 
                 precio: {
@@ -281,7 +282,8 @@
                 stock: {
                     required: true,
                     number: true
-                },
+                }
+            },
                 messages: {
                     nombre: "- El campo Nombre es obligatorio",
                     descripcion: "- El campo Descripcion es obligatorio",
@@ -290,7 +292,7 @@
                 },
                 errorElement: "div",
                 errorLabelContainer: ".alert-danger"
-            }
+
         })
 
 
@@ -322,6 +324,36 @@
                 $("#txtstock").val(json.Stock);
                 $("#cboactivo").val(json.Activo == true ? 1 : 0);
 
+
+                jQuery.ajax({
+                    url: '@Url.Action("ImagenProducto","Mantenedor")',
+                    type: "POST",
+                    data: JSON.stringify({ id : json.IdProducto }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        $("#img_producto").LoadingOverlay("hide");
+
+
+                        if (data.conversion) {
+                            $("#img_producto").attr({ "src": "data:image/" + data.extension + ";base64," + data.textobase64 });
+                        }
+                    },
+                    error: function (error) {
+                        $("#img_producto").LoadingOverlay("hide");
+
+                        $("#mensajeError").show();
+                        $("#mensajeError").text("Error al mostrar imágen");
+
+
+                    },
+                    beforeSend: function () {
+                        $("#img_producto").LoadingOverlay("show");
+                    },
+
+                });
+
             }
 
             $("#FormModal").modal("show");
@@ -339,12 +371,12 @@
         // PARA ELIMINAR
 
         $("#tabla tbody").on("click", '.btn-eliminar', function () {
-            var marcaseleccionada = $(this).closest("tr");
-            var data = tabladata.row(marcaseleccionada).data();
+            var productoseleccionado = $(this).closest("tr");
+            var data = tabladata.row(productoseleccionado).data();
 
             swal({
                 title: "Esta Seguro",
-                text: "¿Desea eliminar la marca?",
+                text: "¿Desea eliminar el Producto?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn-primary",
@@ -355,14 +387,14 @@
                 function () {
 
                     jQuery.ajax({
-                        url: '@Url.Action("EliminarMarca","Mantenedor")',
+                        url: '@Url.Action("EliminarProducto","Mantenedor")',
                         type: "POST",
-                        data: JSON.stringify({ id: data.IdMarca }),
+                        data: JSON.stringify({ id: data.IdProducto }),
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
                             if (data.resultado) {
-                                tabladata.row(marcaseleccionada).remove().draw();
+                                tabladata.row(productoseleccionado).remove().draw();
                             } else {
                                 swal("No se puede eliminar", data.mensaje, "Error")
                             }
