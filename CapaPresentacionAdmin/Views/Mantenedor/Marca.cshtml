@@ -150,7 +150,7 @@
         // PARA EDITAR
 
         $("#tabla tbody").on("click", '.btn-editar', function () {
-            var filaSeleccionada = $(this).closest("tr");
+            filaSeleccionada = $(this).closest("tr");
             var data = tabladata.row(filaSeleccionada).data();
             abrirModal(data)
         })

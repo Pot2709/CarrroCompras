@@ -71,18 +71,20 @@
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="cboactivo">Activo</label>
+                        <label for="cboactivo" class="form-label">Activo</label>
                         <select id="cboactivo" class="form-select">
                             <option value="1">Si</option>
                             <option value="0">No</option>
                         </select>
                     </div>
                   
-                    <div class="row mt-2">
+                    <div class="row">
                         <div class="col-12">
+
                             <div id="mensajeError" class="alert alert-danger" role="alert">
                                 A simple danger alert—check it out!
                             </div>
+
                         </div>
 
                     </div>
@@ -147,7 +149,7 @@
             $("#cboactivo").val(1);
 
 
-            $("#mensajeError").hide();
+                $("#mensajeError").hide();
 
             if (json != null) {
 
@@ -163,8 +165,8 @@
         }
 
         $("#tabla tbody").on("click", '.btn-editar', function () {
-            var filaSeleccionada = $(this).closest("tr");
-            var data = tabladata.row(filaSeleccionada).data();
+            filaSeleccionada = $(this).closest("tr");
+            var data = tabladata.row(filaSeleccionada).data();  
             abrirModal(data)
         })
 
@@ -257,6 +259,7 @@
                         }
 
                     }
+                   
                         //USUARIO EDITAR
 
                     else {
@@ -273,7 +276,9 @@
                             $("#mensajeError").show();
                         }
                     }
-                },
+                    
+            },
+
                 error: function (error) {
 
                     $(".modal-body").LoadingOverlay("hide");
