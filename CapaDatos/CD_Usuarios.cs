@@ -166,7 +166,7 @@ namespace CapaDatos
             {
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
                 {
-                    SqlCommand cmd = new SqlCommand("update usuario set clave = @nuevaclave, restablecer = 0 where idUsuario = @id", oconexion);
+                    SqlCommand cmd = new SqlCommand("update usuario set clave = @nuevaclave, reestablecer = 0 where idUsuario = @id", oconexion);
                     cmd.Parameters.AddWithValue("@id", idusuario);
                     cmd.Parameters.AddWithValue("@nuevaclave", nuevaclave);
                     cmd.CommandType = CommandType.Text;
@@ -192,7 +192,7 @@ namespace CapaDatos
             {
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
                 {
-                    SqlCommand cmd = new SqlCommand("update usuario set clave = @clave, restablecer = 1 where idUsuario = @id", oconexion);
+                    SqlCommand cmd = new SqlCommand("update usuario set clave = @clave, reestablecer = 1 where idUsuario = @id", oconexion);
                     cmd.Parameters.AddWithValue("@id", idusuario);
                     cmd.Parameters.AddWithValue("@clave", clave);
                     cmd.CommandType = CommandType.Text;

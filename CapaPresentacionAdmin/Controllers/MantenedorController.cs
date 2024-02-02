@@ -15,6 +15,7 @@ using System.IO;
 
 namespace CapaPresentacionAdmin.Controllers
 {
+    [Authorize]
     public class MantenedorController : Controller
     {
         // GET: Mantenedor
