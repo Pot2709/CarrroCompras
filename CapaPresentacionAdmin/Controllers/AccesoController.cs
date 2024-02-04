@@ -58,7 +58,7 @@ namespace CapaPresentacionAdmin.Controllers
         }
 
         [HttpPost]
-        public ActionResult CambiarClave(string idusuario, string claveactual, string nuevaclave, string confimarclave)
+        public ActionResult CambiarClave(string idusuario, string claveactual, string nuevaclave, string confirmarclave)
         {
             Usuario oUsuario = new Usuario();
             oUsuario = new CN_Usuarios().Listar().Where(u => u.IdUsuario == int.Parse(idusuario)).FirstOrDefault();
@@ -71,7 +71,7 @@ namespace CapaPresentacionAdmin.Controllers
                 return View();
 
             }
-            else if (nuevaclave != confimarclave)
+            else if (nuevaclave != confirmarclave)
             {
                 TempData["IdUsuario"] = idusuario;
                 ViewData["vclave"] = claveactual;
