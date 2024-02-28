@@ -10,6 +10,7 @@ using System.Web.Security;//esta es la referencia para la funcion
 
 namespace CapaPresentacionAdmin.Controllers
 {
+    //[Authorize]
     public class AccesoController : Controller
     {
         // GET: Acceso

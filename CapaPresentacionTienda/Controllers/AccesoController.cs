@@ -126,7 +126,7 @@ namespace CapaPresentacionTienda.Controllers
 
             if (oCliente.Clave != CN_Recursos.ConvertirSha256(claveactual))
             {
-                TempData["IdUsuario"] = oCliente;
+                TempData["IdCliente"] = oCliente;
                 ViewData["vclave"] = "";
                 ViewBag.Error = "La contraseña actual no es correcta";
                 return View();
@@ -134,7 +134,7 @@ namespace CapaPresentacionTienda.Controllers
             }
             else if (nuevaclave != confirmaclave)
             {
-                TempData["IdUsuario"] = idcliente;
+                TempData["IdCliente"] = idcliente;
                 ViewData["vclave"] = claveactual;
                 ViewBag.Error = "Las contraseñas no coinciden";
                 return View();

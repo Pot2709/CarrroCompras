@@ -16,7 +16,7 @@ using ClosedXML.Excel;
 
 namespace CapaPresentacionAdmin.Controllers
 {
-    [Authorize]//esta tambien es referencia para que no haya acceso y luego se va al web.config
+    /*[Authorize]*///esta tambien es referencia para que no haya acceso y luego se va al web.config
     public class HomeController : Controller
     {
         public ActionResult Index()

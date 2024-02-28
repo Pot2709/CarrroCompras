@@ -7,9 +7,10 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
     <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Reestablecer</title>
 </head>
 <body class="bg-primary">
     <div id="layoutAuthentication">
@@ -19,18 +20,14 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Recuperación de contraseña</h3></div>
                                 <div class="card-body">
-                                    <form action="@Url.Action("Index" ,"Acceso")" method="post">
+                                    <div class="small mb-3 text-muted">Ingrese su dirección de correo y le enviaremos su nueva contraseña</div>
+                                    <form action="@Url.Action("Reestablecer", "Acceso")" method="post">
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="correo" type="email" autocomplete="off" placeholder="test@gmail.com" />
+                                            <input class="form-control" name="correo" type="email" placeholder="name@example.com" />
                                             <label for="inputEmail">Email</label>
                                         </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="clave" type="password" placeholder="123" />
-                                            <label for="inputPassword">Contraseña</label>
-                                        </div>
-
                                         @{
                                             if (ViewBag.Error != null)
                                             {
@@ -41,15 +38,14 @@
                                                 </div>
                                             }
                                         }
-
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="@Url.Action("Reestablecer" , "Acceso")">¿Haz olvidado tu contraseña?</a>
-                                            <button class="btn btn-primary" type="submit">Ingresar</button>
+                                            <a class="small" href="@Url.Action("Index","Acceso")">Regresar al login</a>
+                                            <button class="btn btn-primary" type="submit">Reestablecer la contraseña</button>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="@Url.Action("Registrar" , "Acceso")">¿No tienes una cuenta? Registrate!</a></div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -74,5 +70,5 @@
     </div>
     <script src="~/Scripts/bootstrap.bundle.js"></script>
 
-</body>
+</body>s
 </html>
