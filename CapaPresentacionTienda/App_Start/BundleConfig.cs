@@ -16,13 +16,18 @@ namespace CapaPresentacionTienda
 
             // Utilice la versión de desarrollo de Modernizr para desarrollar y obtener información sobre los formularios.  De esta manera estará
             // para la producción, use la herramienta de compilación disponible en https://modernizr.com para seleccionar solo las pruebas que necesite.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+            bundles.Add(new Bundle("~/bundles/modernizr").Include(
+                        "~/Scripts/modernizr-*",
+                        "~/Scripts/fontawesome/all.min.js",
+                        "~/Scripts/loadigoverlay.min.js",
+                        "~/Scripts/sweetalert.js"
+                        ));
 
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
+                      "~/Scripts/bootstrap.bundle.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/sweetalert.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
         }
