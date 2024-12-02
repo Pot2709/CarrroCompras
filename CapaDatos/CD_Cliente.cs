@@ -9,46 +9,43 @@ using System.Threading.Tasks;
 
 namespace CapaDatos
 {
-    public class CD_Cliente
+    public class CD_Cliente:Conexion
     {
         public List<Cliente> Listar()
         {
             List<Cliente> lista = new List<Cliente>();
-            try
-            {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+            using (SqlConnection cn = new SqlConnection(cadena))
+                try
                 {
-
-                    string query = "select IdCliente,Nombres,Apellidos,Correo,Clave,Reestablecer from Cliente";
-                    SqlCommand cmd = new SqlCommand(query, oconexion);
-                    cmd.CommandType = CommandType.Text;
-
-                    oconexion.Open();
-
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand("sp_ListarCliente", cn))
                     {
-                        while (dr.Read())
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        SqlDataReader drd = cmd.ExecuteReader();
                         {
-                            lista.Add(
-                                new Cliente()
-                                {
-                                    IdCliente = Convert.ToInt32(dr["IdCliente"]),
-                                    Nombres = dr["Nombres"].ToString(),
-                                    Apellidos = dr["Apellidos"].ToString(),
-                                    Correo = dr["Correo"].ToString(),
-                                    Clave = dr["Clave"].ToString(),
-                                    Reestablecer = Convert.ToBoolean(dr["Reestablecer"]),
-                                }
-                                );
+                            while (drd.Read())
+                            {
+                                lista.Add(
+                                    new Cliente()
+                                    {
+                                        IdCliente = Convert.ToInt32(drd["IdCliente"]),
+                                        Nombres = drd["Nombres"].ToString(),
+                                        Apellidos = drd["Apellidos"].ToString(),
+                                        Correo = drd["Correo"].ToString(),
+                                        Clave = drd["Clave"].ToString(),
+                                        Reestablecer = Convert.ToBoolean(drd["Reestablecer"]),
+                                    }
+                                    );
+                            }
                         }
                     }
                 }
-            }
-            catch
-            {
+                catch
+                {
 
-                lista = new List<Cliente>();
-            }
+                    lista = new List<Cliente>();
+                }
 
             return lista;
         }
@@ -60,9 +57,9 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection cn = new SqlConnection(cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("sp_RegistrarCliente", oconexion);
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarCliente", cn);
                     cmd.Parameters.AddWithValue("Nombres", obj.Nombres);
                     cmd.Parameters.AddWithValue("Apellidos", obj.Apellidos);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
@@ -71,7 +68,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    cn.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -90,6 +87,7 @@ namespace CapaDatos
             return idautogenerado;
         }
 
+        //falta convertir procedimiento almacenado
         public bool CambiarClave(int idcliente, string nuevaclave, out string Mensaje)
         {
             bool resultado = false;
@@ -97,13 +95,13 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection cn = new SqlConnection(cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("update cliente set clave = @nuevaclave, reestablecer = 0 where idcliente= @id", oconexion);
+                    SqlCommand cmd = new SqlCommand("update cliente set clave = @nuevaclave, reestablecer = 0 where idcliente= @id", cn);
                     cmd.Parameters.AddWithValue("@id", idcliente);
                     cmd.Parameters.AddWithValue("@nuevaclave", nuevaclave);
                     cmd.CommandType = CommandType.Text;
-                    oconexion.Open();
+                    cn.Open();
                     resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
                 }
             }
@@ -115,7 +113,7 @@ namespace CapaDatos
             return resultado;
         }
 
-
+        //falta convertir procedimiento almacenado
         public bool ReestablecerClave(int idcliente, string clave, out string Mensaje)
         {
             bool resultado = false;
@@ -123,13 +121,13 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection cn = new SqlConnection(cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("update cliente set clave = @clave, reestablecer = 1 where idcliente = @id", oconexion);
+                    SqlCommand cmd = new SqlCommand("update cliente set clave = @clave, reestablecer = 1 where idcliente = @id", cn);
                     cmd.Parameters.AddWithValue("@id", idcliente);
                     cmd.Parameters.AddWithValue("@clave", clave);
                     cmd.CommandType = CommandType.Text;
-                    oconexion.Open();
+                    cn.Open();
                     resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
                 }
             }

@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace CapaDatos
 {
-    public class CD_Reporte
+    public class CD_Reporte:Conexion
     {
 
 
@@ -19,17 +19,17 @@ namespace CapaDatos
             List<Reporte> lista = new List<Reporte>();
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection cn = new SqlConnection(cadena))
                 {
 
                    
-                    SqlCommand cmd = new SqlCommand("sp_ReporteVentas", oconexion);
+                    SqlCommand cmd = new SqlCommand("sp_ReporteVentas", cn);
                     cmd.Parameters.AddWithValue("fechainicio", fechainicio);
                     cmd.Parameters.AddWithValue("fechafin", fechafin);
                     cmd.Parameters.AddWithValue("idtransaccion", idtransaccion);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    cn.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -69,14 +69,14 @@ namespace CapaDatos
            
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection cn = new SqlConnection(cadena))
                 {
 
                     
-                    SqlCommand cmd = new SqlCommand("sp_ReporteDashboard", oconexion);
+                    SqlCommand cmd = new SqlCommand("sp_ReporteDashboard", cn);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    cn.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {

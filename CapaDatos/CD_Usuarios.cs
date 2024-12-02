@@ -12,47 +12,44 @@ using System.Runtime.Remoting;
 
 namespace CapaDatos
 {
-    public class CD_Usuarios
+    public class CD_Usuarios:Conexion
     {
         public List<Usuario> Listar()
         {
             List<Usuario> lista = new List<Usuario>();
-            try
-            {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+            using (SqlConnection cn = new SqlConnection(cadena))
+                try
                 {
-                    
-                    string query = "select IdUsuario,Nombres,Apellidos,Correo,Clave,Reestablecer,Activo from USUARIO";
-                    SqlCommand cmd =  new SqlCommand(query,oconexion);
-                    cmd.CommandType = CommandType.Text;
-
-                    oconexion.Open();
-
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand("spListarUsuario", cn))
                     {
-                        while(dr.Read())
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        SqlDataReader drd = cmd.ExecuteReader();
                         {
-                            lista.Add(
-                                new Usuario()
-                                {
-                                    IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
-                                    Nombres = dr["Nombres"].ToString(),
-                                    Apellidos = dr["Apellidos"].ToString(),
-                                    Correo = dr["Correo"].ToString(),
-                                    Clave = dr["Clave"].ToString(),
-                                    Reestablecer = Convert.ToBoolean(dr["Reestablecer"]),
-                                    Activo = Convert.ToBoolean(dr["Activo"]),
-                                }
-                                );
+                            while (drd.Read())
+                            {
+                                lista.Add(
+                                    new Usuario()
+                                    {
+                                        IdUsuario = Convert.ToInt32(drd["IdUsuario"]),
+                                        Nombres = drd["Nombres"].ToString(),
+                                        Apellidos = drd["Apellidos"].ToString(),
+                                        Correo = drd["Correo"].ToString(),
+                                        Clave = drd["Clave"].ToString(),
+                                        Reestablecer = Convert.ToBoolean(drd["Reestablecer"]),
+                                        Activo = Convert.ToBoolean(drd["Activo"]),
+                                    }
+                                    );
+                            }
                         }
                     }
                 }
-            }
-            catch 
-            {
+                catch
+                {
 
-                lista = new List<Usuario>();
-            }
+                    lista = new List<Usuario>();
+                }
 
             return lista;   
         }
@@ -64,9 +61,9 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection cn = new SqlConnection(cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("sp_RegistrarUsuario", oconexion);
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarUsuario", cn);
                     cmd.Parameters.AddWithValue("Nombres",obj.Nombres);
                     cmd.Parameters.AddWithValue("Apellidos", obj.Apellidos);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
@@ -76,7 +73,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType= CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    cn.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -103,7 +100,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection oconexion = new SqlConnection(cadena))
                 {
                     SqlCommand cmd = new SqlCommand("sp_EditarUsuario", oconexion);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.IdUsuario);
@@ -138,7 +135,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection oconexion = new SqlConnection(cadena))
                 {
                     SqlCommand cmd = new SqlCommand("delete top (1) from usuario where IdUsuario = @id", oconexion);
                     cmd.Parameters.AddWithValue("@id", id);
@@ -164,7 +161,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection oconexion = new SqlConnection(cadena))
                 {
                     SqlCommand cmd = new SqlCommand("update usuario set clave = @nuevaclave, reestablecer = 0 where idUsuario = @id", oconexion);
                     cmd.Parameters.AddWithValue("@id", idusuario);
@@ -182,7 +179,6 @@ namespace CapaDatos
             return resultado;
         }
 
-
         public bool ReestablecerClave(int idusuario, string clave, out string Mensaje)
         {
             bool resultado = false;
@@ -190,7 +186,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                using (SqlConnection oconexion = new SqlConnection(cadena))
                 {
                     SqlCommand cmd = new SqlCommand("update usuario set clave = @clave, reestablecer = 1 where idUsuario = @id", oconexion);
                     cmd.Parameters.AddWithValue("@id", idusuario);
@@ -207,10 +203,6 @@ namespace CapaDatos
             }
             return resultado;
         }
-
-
-
-
 
     }
 }
